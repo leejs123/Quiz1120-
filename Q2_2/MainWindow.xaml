@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Q2_2.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Q2_2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Q2_2">
+
+    <!-- 2행 레이아웃: [0] 툴바 / [1] 그리기 영역 -->
+    <Grid Width="1024" Height="800"
+          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 상단 도구막대 -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Padding="8">
+
+            <!-- 색상 버튼 + 플라이아웃(ColorPicker) -->
+            <Button x:Name="ColorButton" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="색상" VerticalAlignment="Center"/>
+                    <!-- 현재 색 미리보기 -->
+                    <Ellipse x:Name="ColorPreview" Width="18" Height="18"
+                             Stroke="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                             StrokeThickness="1"/>
+                </StackPanel>
+                <Button.Flyout>
+                    <Flyout x:Name="ColorFlyout" Placement="Bottom" ShouldConstrainToRootBounds="True">
+                        <StackPanel Orientation="Vertical" Spacing="8" Padding="8">
+                            <TextBlock Text="펜 색상 선택" Margin="0,0,0,4"/>
+                            <ColorPicker x:Name="PenColorPicker"
+                                         IsAlphaEnabled="False"
+                                         IsMoreButtonVisible="False"
+                                         MinWidth="220"
+                                         Color="#FF000000"
+                                         ColorChanged="PenColorPicker_ColorChanged"/>
+                            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                                <Button x:Name="ApplyColorButton" Content="적용" Click="ApplyColorButton_Click"/>
+                                <Button Content="닫기" Click="CloseColorFlyout_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+
+            <!-- 굵기 슬라이더 -->
+            <TextBlock Text="굵기" VerticalAlignment="Center" Margin="16,0,4,0"/>
+            <Slider x:Name="ThicknessSlider"
+                    Minimum="0.5" Maximum="24" StepFrequency="0.5"
+                    Value="2"
+                    Width="200"
+                    ValueChanged="ThicknessSlider_ValueChanged"/>
+            <TextBlock x:Name="ThicknessValueText"
+                       VerticalAlignment="Center"
+                       Text="2.0 px" Margin="6,0,0,0"/>
+
+            <!-- 저장/불러오기 -->
+            <StackPanel Orientation="Horizontal" Spacing="8" Margin="16,0,0,0">
+                <Button x:Name="SaveButton" Content="저장" Click="SaveButton_Click"/>
+                <Button x:Name="LoadButton" Content="불러오기" Click="LoadButton_Click"/>
+                <Button x:Name="DeleteButton" Content="지우기" Click="DeleteButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- 그리기 표면 -->
+        <Canvas Grid.Row="1"
+                x:Name="DrawCanvas"
+                Background="Transparent"
+                PointerPressed="DrawCanvas_PointerPressed"
+                PointerMoved="DrawCanvas_PointerMoved"
+                PointerReleased="DrawCanvas_PointerReleased"
+                PointerCanceled="DrawCanvas_PointerReleased"
+                PointerCaptureLost="DrawCanvas_PointerReleased"/>
+    </Grid>
+</Window>
